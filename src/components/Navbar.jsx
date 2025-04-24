@@ -1,6 +1,17 @@
 import { Button } from '@mantine/core'
+import { googleLogout } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom'
+
 
 const Navbar = () => {
+
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        googleLogout();
+        navigate("/");
+    }
+
     return (
         <nav className='flex justify-between items-center px-6 py-4 md:px-12 md:py-5  w-full shadow-md'>
             <div className='flex items-center space-x-2'>
@@ -10,7 +21,7 @@ const Navbar = () => {
                 <p className='text-lg font-bold hidden md:block'>Logo Name</p>
             </div>
 
-            <Button>Logout</Button>
+            <Button onClick={handleLogout}>Logout</Button>
         </nav>
     )
 }
