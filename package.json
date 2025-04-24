@@ -12,6 +12,7 @@
   "dependencies": {
     "@mantine/core": "^7.17.4",
     "@mantine/hooks": "^7.17.4",
+    "@react-oauth/google": "^0.12.1",
     "@tailwindcss/vite": "^4.1.4",
     "lucide-react": "^0.503.0",
     "react": "^19.0.0",
