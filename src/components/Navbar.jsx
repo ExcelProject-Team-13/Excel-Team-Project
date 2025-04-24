@@ -1,6 +1,4 @@
 import { Button } from '@mantine/core'
-import React from 'react'
-import { Link } from 'react-router-dom'
 
 const Navbar = () => {
     return (
@@ -12,14 +10,7 @@ const Navbar = () => {
                 <p className='text-lg font-bold hidden md:block'>Logo Name</p>
             </div>
 
-            <div className='space-x-4'>
-                <Link to='/login'>
-                    <Button variant='outline'>Sign in</Button>
-                </Link>
-                <Link to='/signup'>
-                    <Button>Sign up</Button>
-                </Link>
-            </div>
+            <Button>Logout</Button>
         </nav>
     )
 }
