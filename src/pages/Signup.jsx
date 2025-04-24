@@ -58,7 +58,7 @@ const SignUpPage = () => {
           <div className="text-center mt-6">
             <p>
               Already have an account?{" "}
-              <Link to="/login" className="text-[#0f4736] font-semibold hover:underline">
+              <Link to="/" className="text-[#0f4736] font-semibold hover:underline">
                 Sign in
               </Link>
             </p>
