@@ -3,9 +3,10 @@ import { createTheme, MantineProvider } from '@mantine/core';
 import { Route, Routes } from "react-router-dom"
 import "./index.css"
 
-import Dashboard from "./pages/Dashboard"
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import AdminDashboard from './pages/AdminDashboard';
+import UserDashboard from './pages/userDashboard';
 
 const theme = createTheme({
   primaryColor: 'sherwood-green', //primaryColor: #0f4736
@@ -18,9 +19,10 @@ function App() {
   return (
     <MantineProvider theme={theme}>
       <Routes>
-        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/user" element={<UserDashboard />} />
       </Routes>
     </MantineProvider>
 
