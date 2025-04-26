@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button, Divider, Input, PasswordInput, Text } from "@mantine/core";
 import { AtSign, Lock } from "lucide-react";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
+import { notifications } from "@mantine/notifications";
+import axios from "axios";
 
 import AuthImagePattern from "../components/AuthImagePattern";
+
 
 const LoginPage = () => {
   const initialValues = {
@@ -15,6 +18,7 @@ const LoginPage = () => {
   const [formValues, setFormValues] = useState(initialValues);
   const [formErrors, setFormErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,10 +35,50 @@ const LoginPage = () => {
   };
 
   useEffect(() => {
+    const submitData = async () => {
+      try {
+        const response = await axios.post("https://your-backend-url.com/api/login", formValues);
+        console.log("Server response:", response.data);
+
+        if (response.data.token) {
+          localStorage.setItem("token", response.data.token);
+          console.log("Server response:", response.data);
+
+          localStorage.setItem('role', response.data.user.role);
+          
+          notifications.show({
+            title: "Success",
+            message: "Login successful! Welcome back.",
+            color: "green",
+            autoClose: 3000,
+          });
+
+          setTimeout(() => {
+            
+          const role = localStorage.getItem('role');
+          if (role === "admin") {
+            navigate('/admin');
+          } else {
+            navigate('/user')
+          }
+        }, 2000);
+        }
+        
+      } catch (error) {
+        notifications.show({
+          title: "Error",
+          message: error.response?.data?.message || "Login failed. Please check your credentials.",
+          color: "red",
+          autoClose: 5000,
+        });
+        console.error("Failed to submit form:", error);
+      }
+    };
+
     if (Object.keys(formErrors).length === 0 && isSubmitting) {
-      console.log("Form submitted successfully", formValues);
+      submitData();
     }
-  }, [formErrors]);
+  }, [formErrors, isSubmitting]);
 
   const validate = (values) => {
     const errors = {};
@@ -51,12 +95,57 @@ const LoginPage = () => {
   };
 
   const login = useGoogleLogin({
-    onSuccess: tokenResponse => {
-      console.log("Login successful", tokenResponse);
+    onSuccess: async (tokenResponse) => {
+      console.log("Google login success", tokenResponse);
+
+      try {
+        const res = await axios.post('https://your-backend-url.com/api/oauth/google', {
+          access_token: tokenResponse.access_token,
+        });
+
+        localStorage.setItem('token', res.data.token);
+        console.log("Server response:", res.data);
+
+        localStorage.setItem('role', res.data.user.role);
+
+        notifications.show({
+          title: 'Success',
+          message: 'Logged in with Google successfully!',
+          color: 'green',
+          autoClose: 3000,
+        });
+
+        setTimeout(() => {
+          
+          const role = localStorage.getItem('role')
+          if (role === "admin") {
+            navigate('/admin');
+          } else {
+            navigate('/user')
+          }
+        }, 2000);
+
+      } catch (error) {
+        console.error("Google OAuth failed", error);
+        notifications.show({
+          title: 'Error',
+          message: error.response?.data?.message || 'Google login failed!',
+          color: 'red',
+          autoClose: 5000,
+        });
+      }
     },
-    onError: err => console.error("Google login failed", err),
-    flow: "implicit", 
-    popup_type: "token", 
+    onError: (error) => {
+      console.error("Google login error", error);
+      notifications.show({
+        title: 'Error',
+        message: 'Google login failed!',
+        color: 'red',
+        autoClose: 5000,
+      });
+    },
+    flow: "implicit",
+    popup_type: "token",
   });
   
 
@@ -148,7 +237,7 @@ const LoginPage = () => {
 };
 
 const WrappedSigninPage = () => (
-  <GoogleOAuthProvider clientId="1063070336560-n7g5lnsd87kf300ptcudug2il6g8ev00.apps.googleusercontent.com">
+  <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
     <LoginPage />
   </GoogleOAuthProvider>
 );
