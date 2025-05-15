@@ -7,10 +7,18 @@ import { Notifications } from '@mantine/notifications';
 
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import AdminDashboard from './pages/AdminDashboard';
-import UserDashboard from './pages/userDashboard';
+import AdminDashboardLayout from './pages/AdminDashboard';
+import UserDashboardLayout from './pages/UserDashboard';
 // import ProtectedRoute from './routes/ProtectedRoute';
 import LandingPage from './pages/LandingPage';
+import UserDashboard from './pages/dashboard/Dashboard';
+import Upload from './pages/dashboard/Upload';
+import History from './pages/dashboard/History';
+import Settings from './pages/dashboard/Settings';
+import AdminDashboard from './pages/admin/Dashboard';
+import Users from './pages/admin/Users';
+import DataUsage from './pages/admin/DataUsage';
+import Profile from './pages/Profile';
 
 const theme = createTheme({
   primaryColor: 'sherwood-green', //primaryColor: #0f4736
@@ -31,8 +39,21 @@ function App() {
       <Routes>
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
-        <Route path='/admin' element={<AdminDashboard />} />
-        <Route path='/user' element={<UserDashboard />} />
+        <Route path='/profile' element={<Profile />} />
+        
+        <Route path='/admin' element={<AdminDashboardLayout />} >
+          <Route index element={<AdminDashboard />} />
+          <Route path="users" element={<Users />} />
+          <Route path="data-usage" element={<DataUsage />} />
+        </Route>
+
+        <Route path='/dashboard' element={<UserDashboardLayout />}>
+          <Route index element={<UserDashboard />} />
+          <Route path="upload" element={<Upload />} />
+          <Route path="history" element={<History />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+
         <Route path='/' element={<LandingPage />} />
       </Routes>
 
