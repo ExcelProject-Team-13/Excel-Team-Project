@@ -165,7 +165,9 @@ const SignUpPage = () => {
           {/* LOGO */}
           <div className="text-center mb-5">
             <div className="flex flex-col items-center gap-2 group">
-              <ChartBarStacked color="#0f4736" size={32} />
+              <div className="bg-[#e6f0ed] p-2 rounded-lg">
+                <ChartBarStacked size={28} color="#0f4736" />
+              </div>
               <h1 className="text-2xl font-bold mt-2">Create Account</h1>
               <p className="text-base-content/60">Get started with your free account</p>
             </div>
