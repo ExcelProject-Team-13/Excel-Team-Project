@@ -28,7 +28,7 @@ const Upload = () => {
       {activeTab === 'upload' &&
         <div className='mt-6 sm:mt-8 border rounded-lg border-gray-300 p-4 sm:p-6 md:p-10'>
           <div className="flex flex-col items-center mb-6 sm:mb-8">
-            <div className="p-4 sm:p-5 size-16 sm:size-22 bg-[#b0eacd] rounded-lg mb-4 sm:mb-5 flex justify-center items-center">
+            <div className="p-4 sm:p-5 size-16 sm:size-22 bg-[#e6f0ed] rounded-lg mb-4 sm:mb-5 flex justify-center items-center">
               <FileUp size={24} sm:size={32} color="#0f4736" />
             </div>
             <h2 className="text-xl sm:text-2xl font-bold mb-2">Upload Excel File</h2>
@@ -84,7 +84,7 @@ const Upload = () => {
               }
             ].map((feature) => (
               <div key={feature.title} className="flex items-center gap-2 sm:gap-4 p-3 sm:p-4 border border-gray-200 rounded-lg">
-                <div className="bg-[#b0eacd] p-1.5 sm:p-2 rounded-lg">
+                <div className="bg-[#e6f0ed] p-1.5 sm:p-2 rounded-lg">
                   {feature.icon}
                 </div>
                 <div>
@@ -100,7 +100,7 @@ const Upload = () => {
       {activeTab === 'configure' &&
         <div className='mt-6 sm:mt-8 border rounded-lg border-gray-300 p-4 sm:p-6 md:p-10'>
           <div className="flex flex-col items-center mb-6 sm:mb-8">
-            <div className="p-4 sm:p-5 size-16 sm:size-22 bg-[#b0eacd] rounded-lg mb-4 sm:mb-5 flex justify-center items-center">
+            <div className="p-4 sm:p-5 size-16 sm:size-22 bg-[#e6f0ed] rounded-lg mb-4 sm:mb-5 flex justify-center items-center">
               <ChartBar size={24} sm:size={32} color="#0f4736" />
             </div>
             <h2 className="text-xl sm:text-2xl font-bold mb-2">Configure Your Analysis</h2>
@@ -196,7 +196,7 @@ const Upload = () => {
       {activeTab === 'results' &&
         <div className='mt-6 sm:mt-8 border rounded-lg border-gray-300 p-4 sm:p-6 md:p-10'>
           <div className="flex flex-col items-center mb-6 sm:mb-8">
-            <div className="p-4 sm:p-5 size-16 sm:size-22 bg-[#b0eacd] rounded-lg mb-4 sm:mb-5 flex justify-center items-center">
+            <div className="p-4 sm:p-5 size-16 sm:size-22 bg-[#e6f0ed] rounded-lg mb-4 sm:mb-5 flex justify-center items-center">
               <Clock size={24} color="#0f4736" />
             </div>
             <h2 className="text-xl sm:text-2xl font-bold mb-2">Analysis Results</h2>

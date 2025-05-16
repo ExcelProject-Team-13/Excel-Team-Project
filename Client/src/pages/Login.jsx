@@ -45,7 +45,7 @@ const LoginPage = () => {
           console.log("Server response:", response.data);
 
           localStorage.setItem('role', response.data.user.role);
-          
+
           notifications.show({
             title: "Success",
             message: "Login successful! Welcome back.",
@@ -54,16 +54,16 @@ const LoginPage = () => {
           });
 
           setTimeout(() => {
-            
-          const role = localStorage.getItem('role');
-          if (role === "admin") {
-            navigate('/admin');
-          } else {
-            navigate('/user')
-          }
-        }, 2000);
+
+            const role = localStorage.getItem('role');
+            if (role === "admin") {
+              navigate('/admin');
+            } else {
+              navigate('/user')
+            }
+          }, 2000);
         }
-        
+
       } catch (error) {
         notifications.show({
           title: "Error",
@@ -116,7 +116,7 @@ const LoginPage = () => {
         });
 
         setTimeout(() => {
-          
+
           const role = localStorage.getItem('role')
           if (role === "admin") {
             navigate('/admin');
@@ -147,7 +147,7 @@ const LoginPage = () => {
     flow: "implicit",
     popup_type: "token",
   });
-  
+
 
   return (
     <div className="min-h-screen grid lg:grid-cols-2">
@@ -157,7 +157,9 @@ const LoginPage = () => {
           {/* LOGO */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <ChartBarStacked color="#0f4736" size={32} />
+              <div className="bg-[#e6f0ed] p-2 rounded-lg">
+                <ChartBarStacked size={28} color="#0f4736" />
+              </div>
               <h1 className="text-2xl font-bold mt-2">Welcome Back</h1>
               <p className="text-base-content/60">Sign in to your account</p>
             </div>
@@ -207,7 +209,7 @@ const LoginPage = () => {
                 alt="Google"
                 className="w-5 h-5 mr-2"
               />
-               Continue with Google
+              Continue with Google
             </Button>
           </form>
 

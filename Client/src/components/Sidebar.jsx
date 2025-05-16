@@ -35,9 +35,17 @@ const Sidebar = ({ role }) => {
 
     return (
         <aside className={`w-2xs h-screen py-5 border-r border-gray-300 ${isCollapsed ? "w-[70px] px-2" : "w-2xs px-6"}`}>
-            <div className={`flex ${isCollapsed ? " justify-center" : " space-x-2"}`}>
-                <ChartBarStacked color="#0f4736" size={32} />
-                {!isCollapsed && <h1 className="text-xl font-bold">Excel Analyzer</h1>}
+
+            <div className={`flex items-center mb-4 ${isCollapsed ? "justify-center" : "gap-3"}`}>
+                <div className="bg-[#e6f0ed] p-2 rounded-lg">
+                    <ChartBarStacked size={28} color="#0f4736" />
+                </div>
+                {!isCollapsed && (
+                    <div>
+                        <h1 className="text-xl font-bold text-[#0f4736]">Excel Analyzer</h1>
+                        <span className="text-xs text-gray-500">Data Analysis Tool</span>
+                    </div>
+                )}
             </div>
 
             <button
@@ -57,16 +65,16 @@ const Sidebar = ({ role }) => {
             </button>
 
             <ul className="space-y-3 mt-8">
-            {menuItems.map((item) => (
-                <li key={item.name} onClick={() => navigate(item.path)}>
-                    <div title={isCollapsed ? item.name : ""} 
-                         className={`flex items-center text-lg px-3 py-2 rounded-md hover:bg-[#d6f5e4] cursor-pointer transition ${isCollapsed ? "justify-center" : "gap-3"}`}>
-                        {item.icon}
-                        <span className={`${isCollapsed ? "hidden" : ""}`}>{item.name}</span>
-                    </div>
-                </li>
-            ))}
-        </ul>
+                {menuItems.map((item) => (
+                    <li key={item.name} onClick={() => navigate(item.path)}>
+                        <div title={isCollapsed ? item.name : ""}
+                            className={`flex items-center text-lg px-3 py-2 rounded-md hover:bg-[#e6f0ed] cursor-pointer transition ${isCollapsed ? "justify-center" : "gap-3"}`}>
+                            {item.icon}
+                            <span className={`${isCollapsed ? "hidden" : ""}`}>{item.name}</span>
+                        </div>
+                    </li>
+                ))}
+            </ul>
         </aside>
     );
 };

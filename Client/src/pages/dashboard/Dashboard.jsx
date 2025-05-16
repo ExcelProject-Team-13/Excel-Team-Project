@@ -52,7 +52,7 @@ const Dashboard = () => {
                   <p className="text-gray-500 font-semibold text-xs sm:text-sm mt-1 sm:mt-2">{stat.mb} MB of 50 MB</p>
                 )}
               </div>
-              <div className="bg-[#b0eacd] p-2 sm:p-3 rounded-lg">{stat.icon}</div>
+              <div className="bg-[#e6f0ed] p-2 sm:p-3 rounded-lg">{stat.icon}</div>
             </div>
           </div>
         ))}

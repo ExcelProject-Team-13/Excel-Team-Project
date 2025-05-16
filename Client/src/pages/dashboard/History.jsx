@@ -73,7 +73,7 @@ const History = () => {
                   key={index} 
                   className="flex flex-col sm:flex-row items-start gap-3 sm:gap-4 p-3 sm:p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
                 >
-                  <div className="bg-[#b0eacd] p-2 rounded-lg">
+                  <div className="bg-[#e6f0ed] p-2 rounded-lg">
                     {activity.icon}
                   </div>
                   
@@ -133,7 +133,7 @@ const History = () => {
                 <div key={index} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center gap-3">
-                      <div className="bg-[#b0eacd] p-2 rounded-lg">
+                      <div className="bg-[#e6f0ed] p-2 rounded-lg">
                         <FileUp size={20} />
                       </div>
                       <div>
@@ -201,7 +201,7 @@ const History = () => {
               ].map((analysis, index) => (
                 <div key={index} className="border border-gray-200 rounded-lg p-4">
                   <div className="flex items-start gap-3 mb-4">
-                    <div className="bg-[#b0eacd] p-2 rounded-lg">
+                    <div className="bg-[#e6f0ed] p-2 rounded-lg">
                       <ChartBar size={20} />
                     </div>
                     <div>
