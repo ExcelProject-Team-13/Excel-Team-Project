@@ -1,7 +1,11 @@
 import { Paper, Text, SegmentedControl, Button, Table, ActionIcon, RingProgress } from '@mantine/core';
 import { Users, FileUp, ChartBar, Brain, Eye, UserX, Database, Settings, Cog, MoveRight } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
+
+  const navigate = useNavigate();
+
   return (
     <main className="p-4 sm:p-6 md:p-8">
       <div className="flex justify-between items-center mb-6">
@@ -240,13 +244,25 @@ const Dashboard = () => {
 
       {/* Admin Actions */}
       <div className="flex flex-wrap gap-3">
-        <Button leftSection={<Users size={16} />} variant="filled">
+        <Button 
+        leftSection={<Users size={16} />} 
+        variant="filled"
+        onClick={() => navigate('/admin/users')}
+        >
           Manage Users
         </Button>
-        <Button leftSection={<Database size={16} />} variant="light">
+        <Button 
+        leftSection={<Database size={16} />} 
+        variant="light"
+        onClick={() => navigate('/admin/data-usage')}
+        >
           Data Usage
         </Button>
-        <Button leftSection={<Cog size={16} />} variant="light">
+        <Button 
+        leftSection={<Cog size={16} />} 
+        variant="light"
+        onClick={() => navigate('/admin/system-setting')}
+        >
           System Settings
         </Button>
       </div>

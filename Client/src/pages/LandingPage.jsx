@@ -1,5 +1,6 @@
 import { Button, Title, Text, Container, SimpleGrid, Flex, Divider, Group, Box } from '@mantine/core'
-import { BrainCircuit, ChartBarStacked, ChartColumnBig, Download, File, History, Scale3d } from 'lucide-react'
+import { BrainCircuit, ChartBarStacked, ChartColumnBig, Download, File, History, Scale3d, FileUp, ChartBar, Check } from 'lucide-react'
+import { useNavigate } from "react-router";
 
 const LandingPage = () => {
 
@@ -36,22 +37,53 @@ const LandingPage = () => {
     },
   ]
 
+  const navigate = useNavigate();
+
   return (
     <main className='overflow-x-hidden'>
+      {/* Navigation Bar */}
+      <nav className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm z-50 border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            <div className="flex items-center gap-2">
+              <div className="bg-[#e6f0ed] p-2 rounded-lg">
+                <ChartBarStacked size={24} color="#0f4736" />
+              </div>
+              <span className="text-lg md:text-xl font-bold text-[#0f4736]">Excel Analyzer</span>
+            </div>
+
+            <div className="flex items-center gap-2 md:gap-4">
+              <Button
+                variant="subtle"
+                onClick={() => navigate('/login')}
+              >
+                Login
+              </Button>
+              <Button
+                variant="filled"
+                onClick={() => navigate('/signup')}
+              >
+                Register
+              </Button>
+            </div>
+          </div>
+        </div>
+      </nav>
+
       {/* Hero Section */}
-      <section className='min-h-[80vh] bg-gradient-to-tr from-[#07271e] to-[#11543e] flex flex-col justify-center items-center space-y-8 md:space-y-12 px-4 py-16 relative overflow-hidden'>
+      <section className='min-h-[80vh] bg-gradient-to-tr from-[#07271e] to-[#11543e] flex flex-col justify-center items-center space-y-8 md:space-y-12 px-4 py-16 relative overflow-hidden mt-16'>
         <h1 className='text-white text-3xl sm:text-4xl md:text-5xl lg:text-7xl text-center font-bold max-w-5xl leading-tight'>Transform Your Excel Data Into Powerful Insights</h1>
         <p className='text-gray-200 text-lg sm:text-xl md:text-2xl text-center max-w-3xl px-4'>Upload any Excel file and instantly generate interactive 2D and 3D charts with AI-powered analysis</p>
-        <Button radius="md" color='#fff' size='xl'>
+        <Button radius="md" color='#fff' size='xl' onClick={() => navigate('/login')}>
           <Text color='#0f4736' fw={600} size="xl">Get Started Free</Text>
         </Button>
 
-        <Box className="absolute w-[500px] h-[500px] rounded-full bg-[#ffffff0d] -top-40 -right-40" /> 
-        <Box className="absolute w-[300px] h-[300px] rounded-full bg-[#ffffff12] -bottom-20 left-50"/>
+        <Box className="absolute w-[500px] h-[500px] rounded-full bg-[#ffffff0d] -top-40 -right-40" />
+        <Box className="absolute w-[300px] h-[300px] rounded-full bg-[#ffffff12] -bottom-20 left-50" />
       </section>
 
       {/* Features Section */}
-      <section className='py-12 md:py-20 px-4 bg-gray-50 flex flex-col items-center space-y-12 md:space-y-20'>
+      <section id="features" className='py-12 md:py-20 px-4 bg-gray-50 flex flex-col items-center space-y-12 md:space-y-20'>
         <h2 className='text-3xl md:text-5xl font-bold text-center px-4'>Powerful Features for Data Analysis</h2>
         <div className='max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 px-4'>
           {features.map((feature, index) => (
@@ -64,6 +96,188 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* How It Works */}
+      <section className='py-16 md:py-24 bg-[#e6f0ed]'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <h2 className='text-3xl md:text-5xl font-bold text-center mb-16'>How It Works</h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-12 relative'>
+
+            {[
+              {
+                icon: <FileUp size={32} />,
+                title: "1. Upload Your Excel File",
+                description: "Simply drag and drop your Excel file or click to upload"
+              },
+              {
+                icon: <ChartBar size={32} />,
+                title: "2. Choose Visualization",
+                description: "Select from various chart types and customize your visualization"
+              },
+              {
+                icon: <BrainCircuit size={32} />,
+                title: "3. Get AI Insights",
+                description: "Receive automated analysis and actionable insights"
+              }
+            ].map((step, index) => (
+              <div
+                key={index}
+                className='group relative'
+              >
+                {/* Step Number Badge */}
+                <div className='absolute -top-3 -right-3 w-8 h-8 bg-[#0f4736] text-white rounded-full flex items-center justify-center font-bold z-10'>
+                  {index + 1}
+                </div>
+
+                {/* Icon Container */}
+                <div className='bg-white rounded-t-xl pt-8 pb-4 relative'>
+                  <div className='w-20 h-20 bg-[#e6f0ed] rounded-full flex justify-center items-center mx-auto'>
+                    <div className='text-[#0f4736]'>
+                      {step.icon}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Content Container */}
+                <div className='bg-white rounded-b-xl p-6 shadow-sm'>
+                  <h3 className='text-xl font-bold mb-3 text-gray-800'>
+                    {step.title}
+                  </h3>
+                  <p className='text-gray-600'>
+                    {step.description}
+                  </p>
+                </div>
+
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className='py-16 md:py-24 bg-white'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <h2 className='text-3xl md:text-5xl font-bold text-center mb-12'>What Our Users Say</h2>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+            {[
+              {
+                quote: "This platform has completely transformed how our team analyzes sales data. The 3D visualizations make it so much easier to spot trends.",
+                author: "Sarah Johnson",
+                role: "Sales Director, TechCorp"
+              },
+              {
+                quote: "The AI insights feature saved me hours of analysis work. It automatically highlighted patterns I would have missed.",
+                author: "Michael Chen",
+                role: "Data Analyst, Finance Plus",
+                bgColor: "bg-[#0f4736]",
+                textColor: "text-white"
+              },
+              {
+                quote: "As someone who isn't technical, I love how easy it is to upload my Excel files and get beautiful charts without any special skills.",
+                author: "Emma Rodriguez",
+                role: "Marketing Manager, GrowthBrand"
+              }
+            ].map((testimonial, index) => (
+              <div
+                key={index}
+                className={`p-8 rounded-xl shadow-sm ${testimonial.bgColor || 'bg-white'} ${testimonial.textColor || 'text-gray-800'}`}
+              >
+                <p className='text-lg mb-6'>{testimonial.quote}</p>
+                <div>
+                  <p className='font-bold'>{testimonial.author}</p>
+                  <p className={`text-sm ${testimonial.textColor || 'text-gray-500'}`}>{testimonial.role}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing */}
+      <section id="pricing" className='py-16 md:py-24 bg-[#e6f0ed]'>
+        <div className='max-w-6xl mx-auto px-4'>
+          <h2 className='text-3xl md:text-5xl font-bold text-center mb-4'>Simple, Transparent Pricing</h2>
+          <p className='text-center text-gray-600 mb-12'>Choose the plan that works best for your needs, with no hidden fees or complicated tiers</p>
+          <div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+            {[
+              {
+                plan: "Free",
+                price: "$0",
+                description: "Perfect for trying out the platform",
+                features: [
+                  "Upload up to 5 Excel files per month",
+                  "Generate 2D charts",
+                  "Basic data analysis",
+                  "7-day history"
+                ]
+              },
+              {
+                plan: "Pro",
+                price: "$19",
+                period: "/month",
+                description: "For professionals who need more power",
+                features: [
+                  "Upload up to 50 Excel files per month",
+                  "Generate 2D and 3D charts",
+                  "AI-powered insights",
+                  "30-day history",
+                  "Export in multiple formats"
+                ],
+                highlight: true
+              },
+              {
+                plan: "Enterprise",
+                price: "$49",
+                period: "/month",
+                description: "For teams and businesses",
+                features: [
+                  "Unlimited Excel file uploads",
+                  "All chart types and customizations",
+                  "Advanced AI analysis",
+                  "Unlimited history",
+                  "Team collaboration features",
+                  "Priority support"
+                ]
+              }
+            ].map((pricing, index) => (
+              <div
+                key={index}
+                className={`bg-white p-8 rounded-xl ${pricing.highlight
+                    ? 'relative border-2 border-[#0f4736]'
+                    : ''
+                  }`}
+              >
+                {pricing.highlight && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-[#b0eacd] text-[#0f4736] px-4 py-1 rounded-full text-sm font-semibold">
+                    Most Popular
+                  </div>
+                )}
+                <h3 className='text-2xl font-bold mb-2'>{pricing.plan}</h3>
+                <div className='flex items-baseline gap-1 mb-4'>
+                  <span className='text-4xl font-bold'>{pricing.price}</span>
+                  {pricing.period && (
+                    <span className='text-sm text-gray-500'>{pricing.period}</span>
+                  )}
+                </div>
+                <p className='text-sm text-gray-600 mb-8'>{pricing.description}</p>
+                <ul className='space-y-4 mb-8 min-h-[240px]'>
+                  {pricing.features.map((feature, i) => (
+                    <li key={i} className='flex items-center gap-3'>
+                      <div className='p-1 rounded-full bg-[#e6f0ed]'>
+                        <Check size={14} color='#0f4736' />
+                      </div>
+                      <span className='text-gray-600'>{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                <Button variant="outline">
+                  {pricing.highlight ? 'Upgrade to Pro' : index === 2 ? 'Contact Sales' : 'Get Started'}
+                </Button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className='py-12 md:py-16 px-4 md:px-8 bg-gradient-to-tl from-[#07271e] to-[#11543e] text-center max-w-6xl mx-auto rounded-2xl relative my-8 md:my-12 overflow-hidden'>
         <Title mb={{ base: 12, md: 20 }} fz={{ base: "h2", md: "h1" }} order={1} className='text-white px-4'>
@@ -72,88 +286,90 @@ const LandingPage = () => {
         <Text size={{ base: "lg", md: "xl" }} mb={{ base: 24, md: 40 }} maw={700} mx="auto" color='white' px={4}>
           Join thousands of users who are already getting powerful insights from their Excel files
         </Text>
-        <Button radius="md" color='#fff' size='xl'>
+        <Button radius="md" color='#fff' size='xl' onClick={() => navigate('/login')}>
           <Text color='#0f4736' fw={600} size="xl">Get Started Free</Text>
         </Button>
 
-        <Box className="absolute w-[300px] h-[300px] rounded-full bg-[#ffffff0d] -top-40 -right-20" /> 
-        <Box className="absolute w-[200px] h-[200px] rounded-full bg-[#ffffff12] -bottom-20 left-50"/>
+        <Box className="absolute w-[300px] h-[300px] rounded-full bg-[#ffffff0d] -top-40 -right-20" />
+        <Box className="absolute w-[200px] h-[200px] rounded-full bg-[#ffffff12] -bottom-20 left-50" />
       </section>
 
       {/* Footer */}
       <footer className='text-white bg-[#07271e] mt-12 md:mt-20'>
         <Container size="lg" py={{ base: 40, md: 60 }} px={20}>
           <SimpleGrid cols={{ base: 1, sm: 2, md: 4 }} spacing={{ base: 20, md: 30 }}>
-            <div>
-              <div className='flex gap-2'>
-                <ChartBarStacked color="white" size={30} />
-                <Text size="lg" fw={700} mb="md">
+            {/* Brand Section */}
+            <div className='space-y-6'>
+              <div className='flex items-center gap-3 group'>
+                <div className='bg-white/10 p-2 rounded-lg'>
+                  <ChartBarStacked size={30} color='white' />
+                </div>
+                <Text size="lg" fw={700}>
                   Excel Analyzer
                 </Text>
               </div>
-
-              <Text size="sm" c="gray.3" mb="lg">
+              <Text size="sm" c="gray.3" className='leading-relaxed'>
                 Transform your Excel data into powerful insights with interactive 2D and 3D charts and AI-powered
                 analysis.
               </Text>
             </div>
 
-            <div>
-              <Text fw={700} mb="md">
-                Product
-              </Text>
-              <Flex direction="column" gap={10}>
-                {["Features", "Pricing", "Testimonials", "FAQ", "Blog"].map((item) => (
-                  <Text component="a" href="#" key={item} size="sm" c="gray.3" style={{ textDecoration: "none" }}>
-                    {item}
-                  </Text>
-                ))}
-              </Flex>
-            </div>
-
-            <div>
-              <Text fw={700} mb="md">
-                Company
-              </Text>
-              <Flex direction="column" gap={10}>
-                {["About Us", "Careers", "Contact", "Privacy Policy", "Terms of Service"].map((item) => (
-                  <Text component="a" href="#" key={item} size="sm" c="gray.3" style={{ textDecoration: "none" }}>
-                    {item}
-                  </Text>
-                ))}
-              </Flex>
-            </div>
-
-            <div>
-              <Text fw={700} mb="md">
-                Connect
-              </Text>
-              <Flex direction="column" gap={10}>
-                {["Twitter", "LinkedIn", "Facebook", "Instagram", "YouTube"].map((item) => (
-                  <Text component="a" href="#" key={item} size="sm" c="gray.3" style={{ textDecoration: "none" }}>
-                    {item}
-                  </Text>
-                ))}
-              </Flex>
-            </div>
+            {/* Footer Links */}
+            {[
+              {
+                title: "Product",
+                links: ["Features", "Pricing", "Testimonials", "FAQ", "Blog"]
+              },
+              {
+                title: "Company",
+                links: ["About Us", "Careers", "Contact", "Privacy Policy", "Terms of Service"]
+              },
+              {
+                title: "Connect",
+                links: ["Twitter", "LinkedIn", "Facebook", "Instagram", "YouTube"]
+              }
+            ].map((section, index) => (
+              <div key={index} className='space-y-6'>
+                <Text fw={700} mb="md">
+                  {section.title}
+                </Text>
+                <Flex direction="column" gap={12}>
+                  {section.links.map((item) => (
+                    <Text
+                      component="a"
+                      href="#"
+                      key={item}
+                      size="sm"
+                      className='text-gray-400 hover:text-white transition-colors relative group w-fit'
+                    >
+                      <span>{item}</span>
+                      <span className='absolute left-0 right-0 bottom-0 h-px bg-[#b0eacd] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left'></span>
+                    </Text>
+                  ))}
+                </Flex>
+              </div>
+            ))}
           </SimpleGrid>
 
-          <Divider my={{ base: 30, md: 40 }} color="gray.8" />
+          <Divider my={{ base: 30, md: 40 }} opacity={0.1} />
 
           <Flex justify="space-between" align="center" wrap="wrap" gap={{ base: 12, md: 20 }} className='flex-col sm:flex-row'>
-            <Text size="sm" c="gray.5" className='text-center sm:text-left'>
+            <Text size="sm" className='text-center sm:text-left text-gray-400'>
               © {new Date().getFullYear()} Excel Analyzer. All rights reserved.
             </Text>
             <Group gap={{ base: 12, md: 20 }} className='flex-wrap justify-center'>
-              <Text component="a" href="#" size="sm" c="gray.5" style={{ textDecoration: "none" }}>
-                Privacy Policy
-              </Text>
-              <Text component="a" href="#" size="sm" c="gray.5" style={{ textDecoration: "none" }}>
-                Terms of Service
-              </Text>
-              <Text component="a" href="#" size="sm" c="gray.5" style={{ textDecoration: "none" }}>
-                Cookie Policy
-              </Text>
+              {["Privacy Policy", "Terms of Service", "Cookie Policy"].map((item) => (
+                <Text
+                  key={item}
+                  component="a"
+                  href="#"
+                  size="sm"
+                  className='text-gray-400 hover:text-white transition-colors relative group'
+                >
+                  <span>{item}</span>
+                  <span className='absolute left-0 right-0 bottom-0 h-px bg-[#b0eacd] transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left'></span>
+                </Text>
+              ))}
             </Group>
           </Flex>
         </Container>
