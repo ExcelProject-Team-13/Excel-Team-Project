@@ -1,6 +1,7 @@
 import React from 'react'
 import { Avatar, Badge, Button } from '@mantine/core';
 import { FileUp, History, Settings, FileText, ChartBar, BrainCircuit, Database, MoveRight, Clock, Eye, ChartColumnBig, Download, Trash, Pencil } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
   const stats = [
@@ -29,6 +30,8 @@ const Dashboard = () => {
       icon: <Database color="#0f4736" size={24} />
     }
   ];
+
+  const navigate = useNavigate();
 
   return (
     <main>
@@ -62,7 +65,10 @@ const Dashboard = () => {
       <div className="bg-white p-4 sm:p-6 rounded-lg border border-gray-200 shadow-sm">
         <h2 className="text-lg sm:text-xl font-bold mb-3 sm:mb-4">Quick Actions</h2>
         <div className="flex flex-wrap gap-2 sm:gap-4">
-          <Button size="sm" sm:size="md" leftSection={<FileUp size={18} sm:size={20} />}>
+          <Button size="sm" sm:size="md" 
+          leftSection={<FileUp size={18} sm:size={20} />} 
+          onClick={() => navigate('/dashboard/upload')} 
+          >
             Upload New File
           </Button>
 
@@ -70,6 +76,7 @@ const Dashboard = () => {
             size="sm" sm:size="md"
             variant="light"
             leftSection={<History size={18} sm:size={20} />}
+            onClick={() => navigate('/dashboard/history')}
           >
             View History
           </Button>
@@ -78,6 +85,7 @@ const Dashboard = () => {
             size="sm" sm:size="md"
             variant="outline"
             leftSection={<Settings size={18} sm:size={20} />}
+            onClick={() => navigate('/dashboard/settings')}
           >
             Settings
           </Button>

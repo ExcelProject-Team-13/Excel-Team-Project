@@ -127,7 +127,7 @@ const Profile = () => {
               }
             ].map((activity, index) => (
               <div key={index} className="flex items-center gap-3 p-3 border rounded-lg">
-                <div className="bg-[#b0eacd] p-2 rounded-lg">
+                <div className="bg-[#e6f0ed] p-2 rounded-lg">
                   {activity.icon}
                 </div>
                 <div className="flex-1">

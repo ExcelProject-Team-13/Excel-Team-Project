@@ -19,6 +19,7 @@ import AdminDashboard from './pages/admin/Dashboard';
 import Users from './pages/admin/Users';
 import DataUsage from './pages/admin/DataUsage';
 import Profile from './pages/Profile';
+import SystemSettings from './pages/admin/Settings';
 
 const theme = createTheme({
   primaryColor: 'sherwood-green', //primaryColor: #0f4736
@@ -45,6 +46,7 @@ function App() {
           <Route index element={<AdminDashboard />} />
           <Route path="users" element={<Users />} />
           <Route path="data-usage" element={<DataUsage />} />
+          <Route path="system-setting" element={<SystemSettings />} />
         </Route>
 
         <Route path='/dashboard' element={<UserDashboardLayout />}>

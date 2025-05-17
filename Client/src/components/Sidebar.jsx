@@ -1,4 +1,4 @@
-import { ChartBarStacked, Database, FileUp, History, LayoutDashboard, Settings, Users } from "lucide-react";
+import { ChartBarStacked, Cog, Database, FileUp, History, LayoutDashboard, Settings, Users } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -25,6 +25,7 @@ const Sidebar = ({ role }) => {
                 { name: "Dashboard", icon: <LayoutDashboard size={24} />, path: "/admin" },
                 { name: "User Management", icon: <Users size={24} />, path: "/admin/users" },
                 { name: "Data Usage", icon: <Database size={24} />, path: "/admin/data-usage" },
+                { name: "System Setting", icon: <Cog size={24} />, path: "/admin/system-setting" }
             ]
             : [
                 { name: "Dashboard", icon: <LayoutDashboard size={24} />, path: "/dashboard" },
