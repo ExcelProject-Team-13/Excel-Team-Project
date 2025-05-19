@@ -5,6 +5,7 @@ import { AtSign, ChartBarStacked, Lock } from "lucide-react";
 import { GoogleOAuthProvider, useGoogleLogin } from '@react-oauth/google';
 import { notifications } from "@mantine/notifications";
 import axios from "axios";
+import { jwtDecode } from 'jwt-decode';
 
 import AuthImagePattern from "../components/AuthImagePattern";
 
@@ -37,14 +38,17 @@ const LoginPage = () => {
   useEffect(() => {
     const submitData = async () => {
       try {
-        const response = await axios.post("https://your-backend-url.com/api/login", formValues);
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, formValues);
         console.log("Server response:", response.data);
 
         if (response.data.token) {
           localStorage.setItem("token", response.data.token);
           console.log("Server response:", response.data);
 
-          localStorage.setItem('role', response.data.user.role);
+          const token = response.data.token;
+          const decoded = jwtDecode(token);
+
+          localStorage.setItem('role', decoded.role);
 
           notifications.show({
             title: "Success",
@@ -59,7 +63,7 @@ const LoginPage = () => {
             if (role === "admin") {
               navigate('/admin');
             } else {
-              navigate('/user')
+              navigate('/dashboard')
             }
           }, 2000);
         }
@@ -96,37 +100,38 @@ const LoginPage = () => {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("Google login success", tokenResponse);
-
       try {
-        const res = await axios.post('https://your-backend-url.com/api/oauth/google', {
+        // Get user info from Google
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
+        });
+
+        // Send both access token and user info to backend
+        const res = await axios.post(`${import.meta.env.VITE_API_URL}/auth/google`, {
           access_token: tokenResponse.access_token,
+          userInfo: userInfo.data
         });
 
-        localStorage.setItem('token', res.data.token);
-        console.log("Server response:", res.data);
+        if (res.data.token) {
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('role', res.data.role);
 
-        localStorage.setItem('role', res.data.user.role);
+          notifications.show({
+            title: 'Success',
+            message: 'Logged in with Google successfully!',
+            color: 'green',
+            autoClose: 3000,
+          });
 
-        notifications.show({
-          title: 'Success',
-          message: 'Logged in with Google successfully!',
-          color: 'green',
-          autoClose: 3000,
-        });
-
-        setTimeout(() => {
-
-          const role = localStorage.getItem('role')
+          const role = res.data.role;
           if (role === "admin") {
             navigate('/admin');
           } else {
-            navigate('/user')
+            navigate('/dashboard')
           }
-        }, 2000);
-
+        }
       } catch (error) {
-        console.error("Google OAuth failed", error);
+        console.error('Google login error:', error);
         notifications.show({
           title: 'Error',
           message: error.response?.data?.message || 'Google login failed!',
@@ -144,8 +149,9 @@ const LoginPage = () => {
         autoClose: 5000,
       });
     },
-    flow: "implicit",
-    popup_type: "token",
+    scope: 'email profile',
+    ux_mode: 'popup',
+    cookiePolicy: 'single_host_origin'
   });
 
 
