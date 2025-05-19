@@ -88,7 +88,7 @@ const LandingPage = () => {
         <div className='max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-10 px-4'>
           {features.map((feature, index) => (
             <div className='bg-white p-6 md:p-8 rounded-xl space-y-4 md:space-y-5 border border-gray-300 hover:shadow-lg transition-all' key={index}>
-              <div className='size-12 md:size-16 rounded-lg bg-[#b0eacd] flex justify-center items-center'>{feature.icon}</div>
+              <div className='size-12 md:size-16 rounded-lg bg-[#e6f0ed] flex justify-center items-center'>{feature.icon}</div>
               <h3 className='text-xl md:text-2xl font-bold text-gray-800'>{feature.title}</h3>
               <p className='text-gray-600 text-sm md:text-base'>{feature.description}</p>
             </div>

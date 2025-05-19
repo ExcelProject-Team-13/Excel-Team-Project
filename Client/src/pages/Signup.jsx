@@ -46,7 +46,7 @@ const SignUpPage = () => {
   useEffect(() => {
     const submitData = async () => {
       try {
-        const response = await axios.post("https://your-backend-url.com/api/signup", formValues);
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/auth/signup`, formValues);
         console.log("Server response:", response.data);
 
         notifications.show({
@@ -105,56 +105,49 @@ const SignUpPage = () => {
 
   const login = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
-      console.log("Google login success", tokenResponse);
-
       try {
-        const res = await axios.post('https://your-backend-url.com/api/oauth/google', {
-          access_token: tokenResponse.access_token,
+        const userInfo = await axios.get('https://www.googleapis.com/oauth2/v3/userinfo', {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` }
         });
 
-        localStorage.setItem('token', res.data.token);
-        console.log("Server response:", res.data);
-
-        localStorage.setItem('role', res.data.user.role);
+        await axios.post(`${import.meta.env.VITE_API_URL}/auth/google/signup`, {
+          access_token: tokenResponse.access_token,
+          userInfo: userInfo.data
+        });
 
         notifications.show({
           title: 'Success',
-          message: 'Logged in with Google successfully!',
+          message: 'Account created with Google successfully! Please wait...',
           color: 'green',
           autoClose: 3000,
         });
 
         setTimeout(() => {
-
-          const role = localStorage.getItem('role');
-          if (role === "admin") {
-            navigate('/admin');
-          } else {
-            navigate('/user')
-          }
+          navigate('/login');
         }, 2000);
 
       } catch (error) {
-        console.error("Google OAuth failed", error);
+        console.error('Google signup error:', error);
         notifications.show({
           title: 'Error',
-          message: error.response?.data?.message || 'Google login failed!',
+          message: error.response?.data?.message || 'Failed to create account with Google',
           color: 'red',
           autoClose: 5000,
         });
       }
     },
     onError: (error) => {
-      console.error("Google login error", error);
+      console.error("Google signup error", error);
       notifications.show({
         title: 'Error',
-        message: 'Google login failed!',
+        message: 'Google signup failed. Please try again.',
         color: 'red',
         autoClose: 5000,
       });
     },
-    flow: "implicit",
-    popup_type: "token",
+    scope: 'email profile',
+    ux_mode: 'popup',
+    cookiePolicy: 'single_host_origin'
   });
 
   return (
@@ -259,7 +252,7 @@ const SignUpPage = () => {
           <div className="text-center mt-6">
             <p>
               Already have an account?{" "}
-              <Link to="/" className="text-[#0f4736] font-semibold hover:underline">
+              <Link to="/login" className="text-[#0f4736] font-semibold hover:underline">
                 Sign in
               </Link>
             </p>
