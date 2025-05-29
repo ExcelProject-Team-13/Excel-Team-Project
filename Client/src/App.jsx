@@ -20,6 +20,8 @@ import Users from './pages/admin/Users';
 import DataUsage from './pages/admin/DataUsage';
 import Profile from './pages/Profile';
 import SystemSettings from './pages/admin/Settings';
+import Charts from './pages/dashboard/Charts';
+import BarChart from './Charts/2dCharts/HorizontalBarChart';
 
 const theme = createTheme({
   primaryColor: 'sherwood-green', //primaryColor: #0f4736
@@ -41,7 +43,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/profile' element={<Profile />} />
-        
+
         <Route path='/admin' element={<AdminDashboardLayout />} >
           <Route index element={<AdminDashboard />} />
           <Route path="users" element={<Users />} />
@@ -52,6 +54,10 @@ function App() {
         <Route path='/dashboard' element={<UserDashboardLayout />}>
           <Route index element={<UserDashboard />} />
           <Route path="upload" element={<Upload />} />
+          <Route path="charts" element={<Charts />} >
+            <Route path="barchart" element={<BarChart />} />
+
+          </Route>
           <Route path="history" element={<History />} />
           <Route path="settings" element={<Settings />} />
         </Route>

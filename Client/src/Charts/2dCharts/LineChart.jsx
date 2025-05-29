@@ -5,7 +5,7 @@ import { Chart as ChartJS, registerables } from "chart.js";
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { Download, Bookmark, Plus, Trash } from "lucide-react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
-import ExcelReader from "@/app/Input/page";
+import ExcelReader from "../../Input/HVPDPL";
 import "./page.css";
 
 ChartJS.register(...registerables, ChartDataLabels);
@@ -20,7 +20,7 @@ const LineChart = () => {
     const [PointRadius, setPointRadius] = useState(5)
     const [Tension, setTension] = useState(0.3)
     const [LineColor, setLineColor] = useState("#0000ff")
-    const [Fill, setFill] = useState([false, "#ffffff"])
+    const [Fill, setFill] = useState([false, "#ff00ff"])
 
     // Dummy data when original data is unavailable
     const dummyData = [
@@ -34,8 +34,12 @@ const LineChart = () => {
 
     // Setup initial data only once
     useEffect(() => {
-        handleExcelData({ data: dummyData, headers: ["Date", "Value"] });
-
+        handleExcelData({
+            isValid: true,
+            data: dummyData,
+            headers: ["Date", "Value"],
+            title: "polar chart"
+        });
     }, []);  // re-run if excelData changes
 
     const hexToRgba = (hex) => {
@@ -67,7 +71,7 @@ const LineChart = () => {
     };
 
     const options = {
-        responsive: false,
+        responsive: true,
         maintainAspectRatio: false,
         layout: {
             padding: {
@@ -132,24 +136,32 @@ const LineChart = () => {
         }
     };
 
-    const handleExcelData = ({ data, headers }) => {
-        let dataSource = data && data.length > 0 ? data : dummyData;
+    const handleExcelData = (result) => {
+        console.log(result)
+        if (result.isValid == true) {
 
-        const coloredDataSource = dataSource.map((item, index) => {
-            const r = Math.floor(Math.random() * 255);
-            const g = Math.floor(Math.random() * 255);
-            const b = Math.floor(Math.random() * 255);
-            return {
-                ...item,
-                Color: `rgba(${r}, ${g}, ${b}, 1)`
-            };
-        });
+            let dataSource = result.data && result.data.length > 0 ? result.data : dummyData;
 
-        let heads = (headers && headers.length > 0) ? headers : ["Date", "Value"];
-        heads.push("Color");
-        setData(coloredDataSource);
-        setHeaders(heads);
-        setChartTitle(heads[0])
+            const coloredDataSource = dataSource.map((item, index) => {
+                const r = Math.floor(Math.random() * 255);
+                const g = Math.floor(Math.random() * 255);
+                const b = Math.floor(Math.random() * 255);
+                return {
+                    ...item,
+                    Color: `rgba(${r}, ${g}, ${b},1)`,
+                };
+            });
+
+
+            let heads = (result.headers && result.headers.length > 0) ? result.headers : ["Category", "Value"];
+            heads.push("Color", "HoverColor");
+            setData(coloredDataSource);
+            setHeaders(heads);
+            setChartTitle(result.title)
+            // setYScale([0, Math.max(...dataSource.map(item => item[heads[1]]))]);
+        } else {
+            alert("Invalid data format. Please upload a valid Excel file.");
+        }
     };
 
     const addRow = () => {
@@ -208,33 +220,125 @@ const LineChart = () => {
     return (
         <div className="w-[100vw] overflow-x-hidden h-full p-6">
             <h1 className="text-3xl w-full text-center font-bold mb-5">Line CHART</h1>
-            <div className="w-full flex justify-evenly gap-7 items-center h-[60%]">
-                <div className="flex justify-center items-center w-[70%] h-[550px]"><Line className="rounded-[20px] shadow-[0px_0px_8px_0px_black]"
-                    width={750} height={550} ref={chartRef} data={data} options={options} plugins={[customCanvasBackgroundColor]} /></div>
-                <div className="w-[30%] flex flex-col flex-wrap justify-center items-start gap-3">
-                    <h1 className="w-full font-semibold text-xl mb-3">Data Labels:</h1>
-                    <div className="w-[200px] border flex gap-2 items-center justify-start border-[#144da8] rounded-md p-2">
-                        <label htmlFor="datalabels" className=" text-lg font-semibold">Show Data Labels:</label>
-                        <input type="checkbox" name="datalabels" id="" defaultChecked={true} onChange={(e) => setDataLabels([e.target.checked, DataLabels[1], DataLabels[2]])} />
+            <div className="w-full flex xl:flex-row flex-col justify-evenly gap-7 items-center h-[60%]">
+                <div className="flex justify-center items-center lg:w-[750px] w-full h-[550px]">
+                    <div className="rounded-[20px] lg:w-[750px] w-full h-full shadow-[0px_0px_8px_0px_black]">
+                        <Line
+                            ref={chartRef} data={data} options={options} plugins={[customCanvasBackgroundColor]} />
                     </div>
-                    <div className="w-[200px] max-w-xs border border-[#144da8] rounded-md p-2 flex items-center gap-2">
-                        <label htmlFor="position" className="block text-lg font-semibold">Position</label>
-                        <select id="position" name="position" onChange={(e) => { setDataLabels([DataLabels[0], String(e.target.value), DataLabels[2]]); console.log(DataLabels[1]) }} className=" block  rounded-md focus:outline-none  text-md">
-                            <option value="middle" defaultValue={true}>Middle</option>
-                            <option value="end">Top</option>
-                            <option value="start">Bottom</option>
-                        </select>
+                </div>
+                <div className="w-full xl:w-[40%]">
+                    <h1 className="w-full font-semibold text-xl text-center mb-6">Chart Settings:</h1>
+
+                    <div className="flex flex-wrap justify-center items-center gap-4">
+                        {/* Row 1 */}
+                        <div className="border flex gap-2 items-center justify-between border-gray-300 rounded-md p-3">
+                            <label htmlFor="datalabels" className="text-lg font-semibold">Show Data Labels:</label>
+                            <input type="checkbox" name="datalabels" defaultChecked={true}
+                                onChange={(e) => setDataLabels([e.target.checked, DataLabels[1], DataLabels[2]])}
+                            />
+                        </div>
+
+                        <div className="border border-gray-300 rounded-md p-3 flex flex-wrap items-center justify-center gap-2">
+                            <label htmlFor="position" className="text-lg font-semibold">Position</label>
+                            <select id="position" name="position"
+                                onChange={(e) => { setDataLabels([DataLabels[0], String(e.target.value), DataLabels[2]]); console.log(DataLabels[1]) }}
+                                className="block rounded-md focus:outline-none text-md"
+                            >
+                                <option value="middle" defaultValue={true}>Middle</option>
+                                <option value="end">Top</option>
+                                <option value="start">Bottom</option>
+                            </select>
+                        </div>
+
+                        <div className="border border-gray-300 rounded-md p-3 flex flex-wrap  items-center gap-2 justify-center">
+                            <label htmlFor="labelsColor" className="text-lg font-semibold">Labels Color</label>
+                            <input type="color" name="labelsColor"
+                                onChange={(e) => setDataLabels([DataLabels[0], DataLabels[1], String(e.target.value)])}
+                            />
+                        </div>
+
+                        {/* Row 2 */}
+                        <div className="flex items-center justify-center flex-wrap border border-gray-300 rounded-md p-3">
+                            <label className="text-lg font-semibold" htmlFor="title">Title:</label>
+                            <input name="title" type="text" placeholder="Title"
+                                value={ChartTitle ?? "Line Chart Example"}
+                                className="w-32 focus:outline-none text-center"
+                                onChange={(e) => setChartTitle(e.target.value)}
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-center flex-wrap border border-gray-300 gap-2 rounded-md p-3">
+                            <label className="text-lg font-semibold" htmlFor="LineColor">Line Color</label>
+                            <input type="color" name="LineColor"
+                                value={LineColor ?? "#0000ff"}
+                                onChange={(e) => setLineColor(String(e.target.value))}
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-center flex-wrap gap-4 border border-gray-300 rounded-md p-3">
+                            <label className="text-lg font-semibold" htmlFor="Fill">Fill</label>
+                            <input type="checkbox" name="Fill"
+                                value={Fill[0] ?? false}
+                                onChange={(e) => setFill([e.target.checked, Fill[1]])}
+                            />
+                        </div>
+
+                        {/* Row 3 - Fill Color, Point Radius, Tension */}
+                        <div className="flex items-center justify-center flex-wrap gap-2 border border-gray-300 rounded-md p-3">
+                            <label className="text-lg font-semibold" htmlFor="FillColor">Fill Color</label>
+                            <input type="color" name="FillColor"
+                                value={Fill[1]}
+                                onChange={(e) => setFill([Fill[0], String(e.target.value)])}
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-center flex-wrap gap-2 border border-gray-300 rounded-md p-3">
+                            <label className="text-lg font-semibold" htmlFor="pointradius">Point Radius</label>
+                            <input name="pointradius" type="number" min="2" max="10" step="0.5"
+                                value={PointRadius}
+                                onChange={(e) => setPointRadius(parseFloat(e.target.value))}
+                                className="w-16 rounded-md focus:outline-none text-center"
+                            />
+                        </div>
+
+                        <div className="flex items-center justify-center flex-wrap gap-2 border border-gray-300 rounded-md p-3">
+                            <label className="text-lg font-semibold" htmlFor="tension">Tension</label>
+                            <input name="tension" type="number" min="0" max="1" step="0.01"
+                                value={Tension}
+                                onChange={(e) => setTension(parseFloat(e.target.value))}
+                                className="w-16 rounded-md focus:outline-none text-center"
+                            />
+                        </div>
+
+                        {/* Row 4 - Buttons */}
                     </div>
-                    <div className="flex justify-start border border-[#144da8] rounded-md p-2 w-[200px] items-center gap-2">
-                        <label htmlFor="labelsColor" className="text-lg font-semibold">Labels Color</label>
-                        <input type="color" name="labelsColor" id="" onChange={(e) => setDataLabels([DataLabels[0], DataLabels[1], String(e.target.value)])} />
+                    <div className="w-full flex flex-wrap justify-center items-center gap-3">
+                        <div className="w-fit mt-3 flex flex-wrap justify-between gap-4">
+                            <button onClick={addRow} className="button flex-1 flex gap-2 text-md justify-center items-center p-3" role="button">
+                                Add Row <Plus size={18} />
+                            </button>
+                            <div className="flex-1">
+                                <ExcelReader onData={handleExcelData} />
+                            </div>
+                        </div>
+
+                        {/* Row 5 - Buttons */}
+                        <div className="w-fit mt-3 flex flex-wrap justify-between gap-4">
+                            <button className="button flex-1 flex gap-2 text-md justify-center items-center p-3" role="button">
+                                Save <Bookmark size={18} />
+                            </button>
+                            <button onClick={downloadChart} className="button flex-1 flex gap-2 text-md justify-center items-center p-3" role="button">
+                                Download <Download size={18} />
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div className=" mt-6">
-                <h1 className="w-[80%] text-xl underline underline-offset-2 mx-auto font-bold">Data</h1>
-                <div className="w-[80%] mx-auto flex justify-center items-center gap-4">
-                    <div className={`w-[50%] block mt-6`}>
+            <div className="px-7 mt-6">
+                <h1 className="w-[80%] text-3xl mb-7 underline text-center underline-offset-2 mx-auto font-bold">Data</h1>
+                <div className="w-full mx-auto flex lg:flex-row flex-col-reverse justify-center items-center gap-4">
+                    <div className={`lg:w-[70%] w-[90%] block mt-6`}>
                         {/* Header Row */}
                         <div className="grid grid-cols-3 bg-blue-600 text-center text-white font-bold rounded-t-md">
                             <input type="text" name="" id=""
@@ -303,7 +407,7 @@ const LineChart = () => {
                                                                     setData(updatedData);
                                                                 }}
                                                             />
-                                                            <Trash className="absolute right-7 trash-icon" onClick={() => deleteRow(index)} />
+                                                            <Trash className="absolute right-7 text-red-600 trash-icon" onClick={() => deleteRow(index)} />
                                                         </div>
                                                     </div>
                                                 )}
@@ -315,80 +419,7 @@ const LineChart = () => {
                             </Droppable>
                         </DragDropContext>
                     </div>
-                    <div className="w-[50%] flex flex-col justify-center items-center gap-3">
-                        <div className="flex justify-center items-center gap-4">
-                            <div className="flex justify-items-start items-center w-[180px] border gap-3 border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <label className="text-lg font-semibold" htmlFor="title">Title: </label>
-                                <input name="title" type="text" placeholder="Title"
-                                    value={ChartTitle ?? "Line Chart Example"}
-                                    className="w-[80px] focus:outline-none"
-                                    onChange={(e) => {
-                                        setChartTitle(e.target.value)
-                                    }}
-                                />
-                            </div>
-                            <div className="flex justify-evenly items-center w-[180px] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <label className="text-lg font-semibold" htmlFor="LineColor">LineColor</label>
-                                <input type="color" name="LineColor" id=""
-                                    value={LineColor ?? "#0000ff"}
-                                    onChange={(e) => {
-                                        const newValue = String(e.target.value);
-                                        setLineColor(newValue);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-center items-center gap-4">
-                            <div className="flex justify-items-start gap-4 items-center w-[180px] border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <label className="text-lg font-semibold" htmlFor="Fill">Fill</label>
-                                <input type="checkbox" name="Fill" id=""
-                                    value={Fill[0] ?? false}
-                                    onChange={(e) => {
-                                        const newValue = e.target.checked;
-                                        setFill([newValue, Fill[1]]);
-                                    }}
-                                />
-                            </div>
-                            <div className="flex justify-evenly items-center w-[180px] border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <label className="text-lg font-semibold" htmlFor="FillColor">FillColor</label>
-                                <input type="color" name="FillColor" id=""
-                                    value={Fill[1]}
-                                    onChange={(e) => {
-                                        const newValue = String(e.target.value);
-                                        setFill([Fill[0], newValue]);
-                                    }}
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-center items-center gap-4">
-                            <div className="flex justify-evenly items-center w-[180px] border border-gray-300 rounded-md px-1 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <label className="text-lg font-semibold" htmlFor="pointradius">Point Radius</label>
-                                <input name="pointradius" placeholder="5" type="number" min="2" max="10" step="0.5" value={PointRadius}
-                                    onChange={(e) => {
-                                        setPointRadius(parseFloat(e.target.value))
-                                    }}
-                                    className=" w-[40px]  rounded-md focus:outline-none"
-                                />
-                            </div>
-                            <div className="flex justify-evenly items-center w-[180px] border border-gray-300 rounded-md px-1 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                                <label className="text-lg font-semibold" htmlFor="tension">Tension</label>
-                                <input name="tension" placeholder="Tension" type="number" min="0" max="1" step="0.01" value={Tension}
-                                    onChange={(e) => {
-                                        setTension(parseFloat(e.target.value))
-                                    }}
-                                    className="w-[60px]  rounded-md focus:outline-none"
-                                />
-                            </div>
-                        </div>
-                        <div className="flex justify-center items-center gap-4">
-                            <button onClick={addRow} className="button flex gap-2.5 text-md justify-center items-center" role="button">Add Row <Plus size={18} /></button>
-                            <ExcelReader onData={handleExcelData} />
-                        </div>
-                        <div className="flex justify-center gap-4 items-center">
-                            <button className="button flex gap-2.5 text-md justify-center items-center" role="button">Save <Bookmark size={18} /></button>
-                            <button onClick={downloadChart} className="button flex gap-2.5 text-md justify-center items-center" role="button">Download <Download size={18} /></button>
-                        </div>
-                    </div>
+
                 </div>
             </div>
         </div>
